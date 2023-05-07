@@ -1,6 +1,6 @@
 module github.com/supermarine1377/dcf_go
 
-go 1.19
+go 1.17
 
 require golang.org/x/sync v0.2.0
 
