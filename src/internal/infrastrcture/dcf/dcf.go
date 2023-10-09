@@ -4,49 +4,49 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/supermarine1377/dcf_go/src/lib/dcf"
+	dcf_improved "github.com/supermarine1377/dcf_go/src/lib/dcf/improved"
 )
 
 type Input struct {
-	current        float64
-	grothRate      float64
-	discountedRate float64
-	evebit         float64
-	years          int
+	currentEarnings  float64
+	growthRate       float64
+	futureGrowthRate float64
+	discountRate     float64
+	years            int
 }
 
 func NewInput() (*Input, error) {
-	fmt.Print("Current earings: ")
-	c, err := fromStdin()
+	fmt.Printf("Current earings: ")
+	ce, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("Growth rate: ")
-	g, err := fromStdin()
+	fmt.Printf("Growth rate of earnings in 10 years (must be normarized): ")
+	gr, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("Discounted rate: ")
+	fmt.Printf("Growth rate of earings more than 10 years later (must be normarized): ")
+	fgr, err := fromStdin()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("Discount rate (must be normarized): ")
 	d, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("EV/EBITDA: ")
-	e, err := fromStdin()
-	if err != nil {
-		return nil, err
-	}
-	fmt.Print("Year: ")
+	fmt.Printf("Year (must be greater than 10): ")
 	y, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
 	return &Input{
-		current:        c,
-		grothRate:      g,
-		discountedRate: d,
-		evebit:         e,
-		years:          int(y),
+		currentEarnings:  ce,
+		growthRate:       gr,
+		futureGrowthRate: fgr,
+		discountRate:     d,
+		years:            int(y),
 	}, nil
 }
 
@@ -63,5 +63,5 @@ func fromStdin() (float64, error) {
 }
 
 func (i *Input) DCF() float64 {
-	return dcf.DCF(i.current, i.grothRate, i.discountedRate, i.evebit, i.years)
+	return dcf_improved.DCF(i.currentEarnings, i.growthRate, i.futureGrowthRate, i.discountRate, i.years)
 }
