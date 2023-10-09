@@ -21,7 +21,7 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("Groth rate: ")
+	fmt.Print("Growth rate: ")
 	g, err := fromStdin()
 	if err != nil {
 		return nil, err
@@ -31,12 +31,12 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("eveit: ")
+	fmt.Print("EV/EBITDA: ")
 	e, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Print("year: ")
+	fmt.Print("Year: ")
 	y, err := fromStdin()
 	if err != nil {
 		return nil, err
