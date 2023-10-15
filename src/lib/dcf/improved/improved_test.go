@@ -16,7 +16,7 @@ func TestDCF(t *testing.T) {
 		want float64
 	}{
 		{
-			name: "1st",
+			name: "A case written in the book \"The Warren Buffett Way\" in page number 2766. This calcurates intrinic value of Coca-Cola in 1988",
 			args: args{
 				cr:  828,
 				gr:  0.15,
