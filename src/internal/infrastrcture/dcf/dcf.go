@@ -21,17 +21,17 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Growth rate of earnings in 10 years (must be normarized): ")
+	fmt.Printf("Growth rate of earnings in 10 years (must be normalized): ")
 	gr, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Growth rate of earings more than 10 years later (must be normarized): ")
+	fmt.Printf("Growth rate of earings more than 10 years later (must be normalized): ")
 	fgr, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Discount rate (must be normarized): ")
+	fmt.Printf("Discount rate (must be normalized): ")
 	d, err := fromStdin()
 	if err != nil {
 		return nil, err
