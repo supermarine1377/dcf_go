@@ -1,10 +1,10 @@
-package dcf
+package src
 
 import (
 	"fmt"
 	"strconv"
 
-	dcf_improved "github.com/supermarine1377/dcf_go/src/lib/dcf/improved"
+	dcf_improved "github.com/supermarine1377/dcf_go/src/lib/dcf"
 )
 
 type Input struct {
