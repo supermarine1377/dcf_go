@@ -5,8 +5,9 @@ type Condition struct {
 	cr float64
 	// gr represents growth rate of earnings in 10 years. gr must be normalized
 	gr float64
-	// fgr represents growth rate of earings more than 10 years later
-	fgr float64
+	// tgr represents termial growth rate of earnings more than 10 years later.
+	// tgr must be normalized
+	tgr float64
 	// dr represents discounted rate
 	dr float64
 	// y represents the number of years to calculate
@@ -14,11 +15,11 @@ type Condition struct {
 }
 
 // New creates a new Condition instance with the provided parameters.
-func New(cr, gr, fgr, dr float64, y int) *Condition {
+func New(cr, gr, tgr, dr float64, y int) *Condition {
 	return &Condition{
 		cr:  cr,
 		gr:  gr,
-		fgr: fgr,
+		tgr: tgr,
 		dr:  dr,
 		y:   y,
 	}
@@ -34,9 +35,9 @@ func (c *Condition) GrowthRate() float64 {
 	return c.gr
 }
 
-// Fgr returns the growth rate of earnings more than 10 years later.
-func (c *Condition) FutureGrowthRate() float64 {
-	return c.fgr
+// Tgr returns the growth rate of earnings more than 10 years later.
+func (c *Condition) TeminalGrowthRate() float64 {
+	return c.tgr
 }
 
 // Dr returns the discounted rate.

@@ -10,7 +10,7 @@ func DCF(c *condition.Condition) float64 {
 	var (
 		cr  = c.CurrentEarnings()
 		gr  = c.GrowthRate()
-		fgr = c.FutureGrowthRate()
+		tgr = c.TeminalGrowthRate()
 		dr  = c.DiscountRate()
 		y   = c.Years()
 	)
@@ -23,7 +23,7 @@ func DCF(c *condition.Condition) float64 {
 		v += dv                            // Add current year's discounted cash flow to the intrinsic value
 	}
 	for j := 11; j <= y; j++ {
-		cf2 := cr * pow((1+gr), 10.0) * pow((1+fgr), float64(j-10)) // Cash Flow in the year for 10+ years
+		cf2 := cr * pow((1+gr), 10.0) * pow((1+tgr), float64(j-10)) // Cash Flow in the year for 10+ years
 		dv2 := cf2 / pow((1+dr), float64(j))                        // Discounted value of the year's cash flow for 10+ years
 		v += dv2
 	}
