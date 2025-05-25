@@ -1,14 +1,22 @@
 package dcf
 
-import "math"
+import (
+	"math"
 
-// DCF calculates the intrinsic value of an investment based on discounted cash flows
-// cr represents current earnings
-// gr represents growth rate of earnings in 10 years. gr must be normalized
-// fgr represents growth rate of earings more than 10 years later
-// dr represents discounted rate
-func DCF(cr, gr, fgr, dr float64, y int) float64 {
-	v := 0.0 // Intrinsic value
+	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
+)
+
+func DCF(c *condition.Condition) float64 {
+	var (
+		cr  = c.CurrentEarnings()
+		gr  = c.GrowthRate()
+		fgr = c.FutureGrowthRate()
+		dr  = c.DiscountRate()
+		y   = c.Years()
+	)
+
+	var v float64
+
 	for i := 1; i <= 10; i++ {
 		cf := cr * pow((1+gr), float64(i)) // Cash flow in the year
 		dv := cf / pow((1+dr), float64(i)) // Discounted value of the year's cash flow

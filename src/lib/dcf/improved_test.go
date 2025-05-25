@@ -1,6 +1,10 @@
 package dcf
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
+)
 
 func TestDCF(t *testing.T) {
 	type args struct {
@@ -29,7 +33,8 @@ func TestDCF(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := DCF(tt.args.cr, tt.args.gr, tt.args.fgr, tt.args.dr, tt.args.y); got != tt.want {
+			c := condition.New(tt.args.cr, tt.args.gr, tt.args.fgr, tt.args.dr, tt.args.y)
+			if got := DCF(c); got != tt.want {
 				t.Errorf("DCF() = %v, want %v", got, tt.want)
 			}
 		})
