@@ -1,10 +1,11 @@
-package dcf
+package src
 
 import (
 	"fmt"
 	"strconv"
 
-	dcf_improved "github.com/supermarine1377/dcf_go/src/lib/dcf/improved"
+	"github.com/supermarine1377/dcf_go/src/lib/dcf"
+	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
 )
 
 type Input struct {
@@ -63,5 +64,12 @@ func fromStdin() (float64, error) {
 }
 
 func (i *Input) DCF() float64 {
-	return dcf_improved.DCF(i.currentEarnings, i.growthRate, i.futureGrowthRate, i.discountRate, i.years)
+	c := condition.New(
+		i.currentEarnings,
+		i.growthRate,
+		i.futureGrowthRate,
+		i.discountRate,
+		i.years,
+	)
+	return dcf.DCF(c)
 }

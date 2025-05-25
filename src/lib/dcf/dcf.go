@@ -1,27 +1,43 @@
 package dcf
 
-import "math"
+import (
+	"math"
 
-type cashFlow []float64
+	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
+)
 
-func DCF(currentCashFlow float64, growthRate float64, disountRate float64, evebit float64, years int) float64 {
-	var futureCh cashFlow
-	prev := currentCashFlow
-	for y := 1; y < years+1; y++ {
-		prev = prev * (1 + growthRate)
-		futureCh = append(futureCh, prev)
+func DCF(c *condition.Condition) float64 {
+	var (
+		cr  = c.CurrentEarnings()
+		gr  = c.GrowthRate()
+		tgr = c.TeminalGrowthRate()
+		dr  = c.DiscountRate()
+		y   = c.Years()
+	)
+
+	var v float64
+
+	for i := 1; i <= 10; i++ {
+		cf := cr * pow((1+gr), float64(i)) // Cash flow in the year
+		dv := cf / pow((1+dr), float64(i)) // Discounted value of the year's cash flow
+		v += dv                            // Add current year's discounted cash flow to the intrinsic value
 	}
-	var discounted []float64
-	for i, fch := range futureCh {
-		discounted = append(discounted, fch/math.Pow((1+disountRate), float64(i+1)))
+	for j := 11; j <= y; j++ {
+		cf2 := cr * pow((1+gr), 10.0) * pow((1+tgr), float64(j-10)) // Cash Flow in the year for 10+ years
+		dv2 := cf2 / pow((1+dr), float64(j))                        // Discounted value of the year's cash flow for 10+ years
+		v += dv2
 	}
-	var result float64
-	for i := range discounted {
-		if i == len(discounted)-1 {
-			result += discounted[i] * evebit
-		} else {
-			result += discounted[i]
-		}
+	return math.Round(v)
+}
+
+// pow calculates the power of a float64 base to an exponent
+func pow(b, e float64) float64 {
+	if e == 0.0 {
+		return 1
 	}
-	return result
+	r := b // result
+	for i := 1.0; i < e; i++ {
+		r *= b
+	}
+	return r
 }
