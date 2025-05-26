@@ -70,11 +70,11 @@ func promptAndReadFloat(promptText string) (float64, error) {
 // DCF calculates the discounted cash flow based on the input parameters.
 func (i *Input) DCF() float64 {
 	c := condition.New(
-		i.currentEarnings,
-		i.growthRate,
-		i.terminalGrowthRate,
-		i.discountRate,
-		i.years,
+		condition.WithCurrentEarnings(i.currentEarnings),
+		condition.WithGrowthRate(i.growthRate),
+		condition.WithTerminalGrowthRate(i.terminalGrowthRate),
+		condition.WithDiscountRate(i.discountRate),
+		condition.WithYears(i.years),
 	)
 	return dcf.DCF(c)
 }
