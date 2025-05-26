@@ -15,29 +15,35 @@ func DCF(c *condition.Condition) float64 {
 		y   = c.Years()
 	)
 
-	var v float64
+	// Calculate the discounted cash flow for the first 10 years
+	presentValue := calculatePresentValue(cr, gr, dr, 10)
 
-	for i := 1; i <= 10; i++ {
-		cf := cr * pow((1+gr), float64(i)) // Cash flow in the year
-		dv := cf / pow((1+dr), float64(i)) // Discounted value of the year's cash flow
-		v += dv                            // Add current year's discounted cash flow to the intrinsic value
-	}
-	for j := 11; j <= y; j++ {
-		cf2 := cr * pow((1+gr), 10.0) * pow((1+tgr), float64(j-10)) // Cash Flow in the year for 10+ years
-		dv2 := cf2 / pow((1+dr), float64(j))                        // Discounted value of the year's cash flow for 10+ years
-		v += dv2
-	}
-	return math.Round(v)
+	// Calculate the discounted cash flow for the remaining years
+	presentValue += calculatePresentValueLongTerm(cr, gr, tgr, dr, y)
+
+	return math.Round(presentValue)
 }
 
-// pow calculates the power of a float64 base to an exponent
-func pow(b, e float64) float64 {
-	if e == 0.0 {
-		return 1
+// calculatePresentValue calculates the discounted cash flow for the first 10 years
+func calculatePresentValue(currentEarnings, growthRate, discountRate float64, years int) float64 {
+	presentValue := 0.0
+	for i := 1; i <= years; i++ {
+		cashFlow := currentEarnings * math.Pow((1+growthRate), float64(i))
+		discountedValue := cashFlow / math.Pow((1+discountRate), float64(i))
+		presentValue += discountedValue
 	}
-	r := b // result
-	for i := 1.0; i < e; i++ {
-		r *= b
+	return presentValue
+}
+
+// calculatePresentValueLongTerm calculates the discounted cash flow for years after the first 10 years
+func calculatePresentValueLongTerm(currentEarnings, growthRate, terminalGrowthRate, discountRate float64, years int) float64 {
+	presentValue := 0.0
+	for j := 11; j <= years; j++ {
+		// Cash Flow in the year for 10+ years
+		cf2 := currentEarnings * math.Pow((1+growthRate), 10) * math.Pow((1+terminalGrowthRate), float64(j-10))
+		// Discounted value of the year's cash flow for 10+ years
+		dv2 := cf2 / math.Pow((1+discountRate), float64(j))
+		presentValue += dv2
 	}
-	return r
+	return presentValue
 }
