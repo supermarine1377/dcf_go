@@ -12,11 +12,7 @@ import (
 )
 
 type Input struct {
-	currentEarnings    float64
-	growthRate         float64
-	terminalGrowthRate float64
-	discountRate       float64
-	years              int
+	c *condition.Condition
 }
 
 // NewInput creates a new Input instance by prompting the user for input.
@@ -41,13 +37,18 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Input{
-		currentEarnings:    ce,
-		growthRate:         gr,
-		terminalGrowthRate: tgr,
-		discountRate:       d,
-		years:              int(y),
-	}, nil
+	c, err := condition.New(
+		condition.WithCurrentEarnings(ce),
+		condition.WithGrowthRate(gr),
+		condition.WithTerminalGrowthRate(tgr),
+		condition.WithDiscountRate(d),
+		condition.WithYears(int(y)),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Input{c: c}, nil
 }
 
 // promptAndReadFloat prompts the user for input and reads a float64 value from stdin.
@@ -69,12 +70,5 @@ func promptAndReadFloat(promptText string) (float64, error) {
 
 // DCF calculates the discounted cash flow based on the input parameters.
 func (i *Input) DCF() float64 {
-	c := condition.New(
-		condition.WithCurrentEarnings(i.currentEarnings),
-		condition.WithGrowthRate(i.growthRate),
-		condition.WithTerminalGrowthRate(i.terminalGrowthRate),
-		condition.WithDiscountRate(i.discountRate),
-		condition.WithYears(i.years),
-	)
-	return dcf.DCF(c)
+	return dcf.DCF(i.c)
 }

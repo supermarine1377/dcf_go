@@ -33,7 +33,7 @@ func TestDCF(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := condition.New(
+			c, _ := condition.New(
 				condition.WithCurrentEarnings(tt.args.cr),
 				condition.WithGrowthRate(tt.args.gr),
 				condition.WithTerminalGrowthRate(tt.args.fgr),

@@ -1,5 +1,7 @@
 package condition
 
+import "fmt"
+
 // Condition represents the parameters needed to calculate the intrinsic value of a stock using the Discounted Cash Flow (DCF) method.
 type Condition struct {
 	// currentEarnings represents current earnings
@@ -19,13 +21,18 @@ type Condition struct {
 type Option func(*Condition)
 
 // New creates a new Condition instance with the provided parameters.
-func New(options ...Option) *Condition {
+func New(options ...Option) (*Condition, error) {
 	c := &Condition{}
 
 	for _, option := range options {
 		option(c)
 	}
-	return c
+
+	if err := c.Validate(); err != nil {
+		return nil, fmt.Errorf("invalid condition: %w", err)
+	}
+
+	return c, nil
 }
 
 // WithCurrentEarnings sets the CurrentEarnings field.
@@ -86,4 +93,23 @@ func (c *Condition) DiscountRate() float64 {
 // Years returns the number of years to calculate.
 func (c *Condition) Years() int {
 	return c.years
+}
+
+func (c *Condition) Validate() error {
+	if c.currentEarnings <= 0 {
+		return fmt.Errorf("current earnings must be greater than 0, got %f", c.currentEarnings)
+	}
+	if c.growthRate < 0 || c.growthRate > 1 {
+		return fmt.Errorf("growth rate must be between 0 and 1, got %f", c.growthRate)
+	}
+	if c.terminalGrowthRate < 0 || c.terminalGrowthRate > 1 {
+		return fmt.Errorf("terminal growth rate must be between 0 and 1, got %f", c.terminalGrowthRate)
+	}
+	if c.discountRate <= 0 || c.discountRate > 1 {
+		return fmt.Errorf("discount rate must be between 0 and 1, got %f", c.discountRate)
+	}
+	if c.years <= 0 {
+		return fmt.Errorf("years must be greater than 0, got %d", c.years)
+	}
+	return nil
 }
