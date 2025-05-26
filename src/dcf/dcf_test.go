@@ -33,7 +33,13 @@ func TestDCF(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := condition.New(tt.args.cr, tt.args.gr, tt.args.fgr, tt.args.dr, tt.args.y)
+			c := condition.New(
+				condition.WithCurrentEarnings(tt.args.cr),
+				condition.WithGrowthRate(tt.args.gr),
+				condition.WithTerminalGrowthRate(tt.args.fgr),
+				condition.WithDiscountRate(tt.args.dr),
+				condition.WithYears(tt.args.y),
+			)
 			if got := DCF(c); got != tt.want {
 				t.Errorf("DCF() = %v, want %v", got, tt.want)
 			}
