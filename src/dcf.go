@@ -9,11 +9,11 @@ import (
 )
 
 type Input struct {
-	currentEarnings  float64
-	growthRate       float64
-	futureGrowthRate float64
-	discountRate     float64
-	years            int
+	currentEarnings    float64
+	growthRate         float64
+	terminalGrowthRate float64
+	discountRate       float64
+	years              int
 }
 
 func NewInput() (*Input, error) {
@@ -27,8 +27,8 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Growth rate of earings more than 10 years later (must be normalized): ")
-	fgr, err := fromStdin()
+	fmt.Printf("Terminal Growth rate of earings more than 10 years later (must be normalized): ")
+	tgr, err := fromStdin()
 	if err != nil {
 		return nil, err
 	}
@@ -43,11 +43,11 @@ func NewInput() (*Input, error) {
 		return nil, err
 	}
 	return &Input{
-		currentEarnings:  ce,
-		growthRate:       gr,
-		futureGrowthRate: fgr,
-		discountRate:     d,
-		years:            int(y),
+		currentEarnings:    ce,
+		growthRate:         gr,
+		terminalGrowthRate: tgr,
+		discountRate:       d,
+		years:              int(y),
 	}, nil
 }
 
