@@ -3,7 +3,7 @@ package dcf
 import (
 	"testing"
 
-	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
+	"github.com/supermarine1377/dcf_go/src/dcf/condition"
 )
 
 func TestDCF(t *testing.T) {
