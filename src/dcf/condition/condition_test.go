@@ -12,6 +12,7 @@ func TestCondition_Validate(t *testing.T) {
 		growthRate         float64
 		terminalGrowthRate float64
 		discountRate       float64
+		growthYears        int
 		years              int
 	}
 	tests := []struct {
@@ -26,6 +27,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         0.05,
 				terminalGrowthRate: 0.03,
 				discountRate:       0.1,
+				growthYears:        5,
 				years:              10,
 			},
 			wantErr: false,
@@ -37,6 +39,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         0.05,
 				terminalGrowthRate: 0.03,
 				discountRate:       0.1,
+				growthYears:        5,
 				years:              10,
 			},
 			wantErr: true,
@@ -48,6 +51,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         1.5,
 				terminalGrowthRate: 0.03,
 				discountRate:       0.1,
+				growthYears:        5,
 				years:              10,
 			},
 			wantErr: true,
@@ -59,6 +63,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         0.5,
 				terminalGrowthRate: 1.5,
 				discountRate:       0.1,
+				growthYears:        5,
 				years:              10,
 			},
 			wantErr: true,
@@ -70,6 +75,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         0.5,
 				terminalGrowthRate: 0.5,
 				discountRate:       1.1,
+				growthYears:        5,
 				years:              10,
 			},
 			wantErr: true,
@@ -81,7 +87,32 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         0.5,
 				terminalGrowthRate: 0.5,
 				discountRate:       0.1,
+				growthYears:        5,
 				years:              0,
+			},
+			wantErr: true,
+		},
+		{
+			name: "GrowthYears greater than years",
+			fields: fields{
+				currentEarnings:    1000,
+				growthRate:         0.5,
+				terminalGrowthRate: 0.5,
+				discountRate:       0.1,
+				growthYears:        20,
+				years:              10,
+			},
+			wantErr: true,
+		},
+		{
+			name: "Invalid growthYears",
+			fields: fields{
+				currentEarnings:    1000,
+				growthRate:         0.5,
+				terminalGrowthRate: 0.5,
+				discountRate:       0.1,
+				growthYears:        0,
+				years:              10,
 			},
 			wantErr: true,
 		},
@@ -93,6 +124,7 @@ func TestCondition_Validate(t *testing.T) {
 				growthRate:         tt.fields.growthRate,
 				terminalGrowthRate: tt.fields.terminalGrowthRate,
 				discountRate:       tt.fields.discountRate,
+				growthYears:        tt.fields.growthYears,
 				years:              tt.fields.years,
 			}
 			err := c.Validate()

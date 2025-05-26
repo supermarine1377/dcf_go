@@ -25,6 +25,10 @@ func NewInput() (*Input, error) {
 	if err != nil {
 		return nil, err
 	}
+	gy, err := promptAndReadFloat(msgGrowyhYears)
+	if err != nil {
+		return nil, err
+	}
 	tgr, err := promptAndReadFloat(msgTerminalGrowthRate)
 	if err != nil {
 		return nil, err
@@ -40,6 +44,7 @@ func NewInput() (*Input, error) {
 	c, err := condition.New(
 		condition.WithCurrentEarnings(ce),
 		condition.WithGrowthRate(gr),
+		condition.WithGrowthYears(int(gy)),
 		condition.WithTerminalGrowthRate(tgr),
 		condition.WithDiscountRate(d),
 		condition.WithYears(int(y)),

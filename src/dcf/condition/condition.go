@@ -8,12 +8,14 @@ type Condition struct {
 	currentEarnings float64
 	// growthRate represents growth rate of earnings in 10 years. gr must be normalized
 	growthRate float64
+	// growthYears represents the number of years where the growth rate is applied.
+	growthYears int
 	// terminalGrowthRate represents termial growth rate of earnings more than 10 years later.
 	// terminalGrowthRate must be normalized
 	terminalGrowthRate float64
 	// discountRate represents discounted rate
 	discountRate float64
-	// years represents the number of years to calculate
+	// years represents the number of years to calculate. Must be greater than grrowthYears
 	years int
 }
 
@@ -49,6 +51,13 @@ func WithGrowthRate(gr float64) Option {
 	}
 }
 
+// WithGrowthYears sets the GrowthYears field.
+func WithGrowthYears(gy int) Option {
+	return func(c *Condition) {
+		c.growthYears = gy
+	}
+}
+
 // WithTerminalGrowthRate sets the TerminalGrowthRate field.
 func WithTerminalGrowthRate(tgr float64) Option {
 	return func(c *Condition) {
@@ -75,12 +84,17 @@ func (c *Condition) CurrentEarnings() float64 {
 	return c.currentEarnings
 }
 
-// Gr returns the growth rate of earnings in 10 years.
+// Gr returns the growth rate of earnings in GrowthYears.
 func (c *Condition) GrowthRate() float64 {
 	return c.growthRate
 }
 
-// Tgr returns the growth rate of earnings more than 10 years later.
+// GrowthYears returns the number of years where the growth rate is applied.
+func (c *Condition) GrowthYears() int {
+	return c.growthYears
+}
+
+// Tgr returns the growth rate of earnings more than GrowthYears later.
 func (c *Condition) TeminalGrowthRate() float64 {
 	return c.terminalGrowthRate
 }
@@ -95,6 +109,7 @@ func (c *Condition) Years() int {
 	return c.years
 }
 
+// Validate validates the condition.
 func (c *Condition) Validate() error {
 	if c.currentEarnings <= 0 {
 		return fmt.Errorf("current earnings must be greater than 0, got %f", c.currentEarnings)
@@ -108,6 +123,10 @@ func (c *Condition) Validate() error {
 	if c.discountRate <= 0 || c.discountRate > 1 {
 		return fmt.Errorf("discount rate must be between 0 and 1, got %f", c.discountRate)
 	}
+	if c.growthYears <= 0 || c.growthYears > c.years {
+		return fmt.Errorf("growth years must be greater than 0 and less than or equal to years, got %d", c.growthYears)
+	}
+
 	if c.years <= 0 {
 		return fmt.Errorf("years must be greater than 0, got %d", c.years)
 	}
