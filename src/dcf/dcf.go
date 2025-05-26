@@ -10,16 +10,16 @@ func DCF(c *condition.Condition) float64 {
 	var (
 		cr  = c.CurrentEarnings()
 		gr  = c.GrowthRate()
+		gy  = c.GrowthYears()
 		tgr = c.TeminalGrowthRate()
 		dr  = c.DiscountRate()
 		y   = c.Years()
 	)
 
-	// Calculate the discounted cash flow for the first 10 years
-	presentValue := calculatePresentValue(cr, gr, dr, 10)
+	presentValue := calculatePresentValue(cr, gr, dr, gy)
 
 	// Calculate the discounted cash flow for the remaining years
-	presentValue += calculatePresentValueLongTerm(cr, gr, tgr, dr, y)
+	presentValue += calculatePresentValueLongTerm(cr, gr, tgr, dr, gy, y)
 
 	return math.Round(presentValue)
 }
@@ -36,9 +36,9 @@ func calculatePresentValue(currentEarnings, growthRate, discountRate float64, ye
 }
 
 // calculatePresentValueLongTerm calculates the discounted cash flow for years after the first 10 years
-func calculatePresentValueLongTerm(currentEarnings, growthRate, terminalGrowthRate, discountRate float64, years int) float64 {
+func calculatePresentValueLongTerm(currentEarnings, growthRate, terminalGrowthRate, discountRate float64, grothYears, years int) float64 {
 	presentValue := 0.0
-	for j := 11; j <= years; j++ {
+	for j := grothYears + 1; j <= years; j++ {
 		// Cash Flow in the year for 10+ years
 		cf2 := currentEarnings * math.Pow((1+growthRate), 10) * math.Pow((1+terminalGrowthRate), float64(j-10))
 		// Discounted value of the year's cash flow for 10+ years
