@@ -67,7 +67,7 @@ func (i *Input) DCF() float64 {
 	c := condition.New(
 		i.currentEarnings,
 		i.growthRate,
-		i.futureGrowthRate,
+		i.terminalGrowthRate,
 		i.discountRate,
 		i.years,
 	)
