@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/supermarine1377/dcf_go/src/lib/dcf"
-	"github.com/supermarine1377/dcf_go/src/lib/dcf/condition"
+	"github.com/supermarine1377/dcf_go/src/dcf"
+	"github.com/supermarine1377/dcf_go/src/dcf/condition"
 )
 
 type Input struct {
